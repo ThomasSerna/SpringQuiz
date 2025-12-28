@@ -1,24 +1,34 @@
 package com.app.springquiz.controller;
 
+import com.app.springquiz.model.Quiz;
+import com.app.springquiz.service.QuizService;
 import com.app.springquiz.service.QuizUserDetailsService;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class QuizController {
 
     // DI
+
     private final QuizUserDetailsService quizUserDetailsService;
+    private final QuizService quizService;
     private final AuthenticationManager authenticationManager;
 
-    public QuizController(QuizUserDetailsService quizUserDetailsService, AuthenticationManager authenticationManager) {
+    public QuizController(QuizUserDetailsService quizUserDetailsService, QuizService quizService, AuthenticationManager authenticationManager) {
         this.quizUserDetailsService = quizUserDetailsService;
+        this.quizService = quizService;
         this.authenticationManager = authenticationManager;
     }
 
@@ -26,17 +36,17 @@ public class QuizController {
 
     @GetMapping("/login")
     public String loginPage(){
-        return "login";
+        return "/auth/login";
     }
 
     @GetMapping("/logout")
     public String logoutPage(){
-        return "logout";
+        return "/auth/logout";
     }
 
     @GetMapping("/register")
     public String registerPage(){
-        return "register";
+        return "/auth/register";
     }
 
     @PostMapping("/register")
@@ -61,5 +71,100 @@ public class QuizController {
 
         return "redirect:/login?success";
     }
+
+    // Quiz service endpoints
+
+    @GetMapping("/quiz/add")
+    public String ShowAddQuiz(Model model) {
+        model.addAttribute("quiz", new Quiz());
+        return "/quiz/add";
+    }
+
+    @PostMapping("/quiz/add")
+    public String addQuiz(@ModelAttribute Quiz quiz, Model model, Authentication authentication) {
+
+        // Get user's role
+        String role = authentication.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .findFirst()
+                .orElse("ROLE_USER");
+
+        if (role.equals("ROLE_ADMIN")) {
+            quiz.setId(quizService.getNextId());
+            quizService.addQuiz(quiz);
+
+            model.addAttribute("success", "Quiz added successfully!");
+            return "redirect:/home";
+        } else {
+            model.addAttribute("error", "You don't have permission to add a quiz.");
+            return "redirect:/quiz/add?error";
+        }
+    }
+
+    @GetMapping("/quiz/edit/{id}")
+    public String ShowEditQuiz(@PathVariable("id") int id, Model model) {
+        Quiz quiz = quizService.getQuizById(id);
+        model.addAttribute("quiz", quiz);
+        return "/quiz/edit";
+    }
+
+    @PostMapping("/quiz/edit")
+    public String editQuiz(@ModelAttribute Quiz quiz, Model model, Authentication authentication) {
+        // Get user's role
+        String role = authentication.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .findFirst()
+                .orElse("ROLE_USER");
+
+        if (role.equals("ROLE_ADMIN")) {
+            quizService.editQuiz(quiz);
+
+            model.addAttribute("success", "Quiz edited successfully!");
+            return "redirect:/home";
+        } else {
+            return "redirect:/home";
+        }
+    }
+
+    @GetMapping("/quiz/delete/{id}")
+    public String deleteQuiz(@PathVariable("id") int id, Model model, Authentication authentication) {
+        // Get user's role
+        String role = authentication.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .findFirst()
+                .orElse("ROLE_USER");
+
+        if (role.equals("ROLE_ADMIN")) {
+            quizService.deleteQuiz(id);
+
+            model.addAttribute("success", "Quiz deleted successfully!");
+            return "redirect:/home";
+        } else {
+            return "redirect:/home";
+        }
+    }
+
+    @PostMapping("/submitQuiz")
+    public String evaluateQuiz(@RequestParam Map<String, String> allParams, Model model) {
+        int correctAnswers = 0;
+        List<String> userAnswers = new ArrayList<>();
+        List<Quiz> quizzes = quizService.loadQuizzes();
+
+        for (int i = 0; i < quizzes.size(); i++) {
+            String userAnswer = allParams.get("answer"+ i);
+            userAnswers.add(userAnswer);
+            if (userAnswer.equals(quizzes.get(i).getCorrectAnswer())){
+                correctAnswers++;
+            }
+        }
+
+        model.addAttribute("quizzes", quizzes);
+        model.addAttribute("userAnswers", userAnswers);
+        model.addAttribute("correctAnswers", correctAnswers);
+        model.addAttribute("totalQuestions", quizzes.size());
+
+        return "/quiz/result";
+    }
+
 
 }

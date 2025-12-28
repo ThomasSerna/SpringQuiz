@@ -2,16 +2,18 @@ package com.app.springquiz.model;
 
 import java.util.ArrayList;
 
-public class Question {
+public class Quiz {
 
     private int id;
     private String questionText;
     private ArrayList<String> options = new ArrayList<>();
     private String correctAnswer;
 
-    public Question() {}
+    public Quiz() {
+        this.options = new ArrayList<>();
+    }
 
-    public Question(int id, String questionText, ArrayList<String> options, String correctAnswer) {
+    public Quiz(int id, String questionText, ArrayList<String> options, String correctAnswer) {
         this.id = id;
         this.questionText = questionText;
         this.options = options != null ? new ArrayList<>(options) : new ArrayList<>();
