@@ -40,9 +40,9 @@ public class QuizUserDetailsService implements UserDetailsService {
         User user = new User(
                 ((long) users.size()),
                 username,
+                email,
                 passwordEncoder.encode(password),
-                roles,
-                email
+                roles
         );
 
         users.put(username, user);
