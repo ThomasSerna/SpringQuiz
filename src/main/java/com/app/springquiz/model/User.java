@@ -10,7 +10,8 @@ public class User {
 
     public User() {}
 
-    public User(String username, String email, String password, String role) {
+    public User(Long id, String username, String email, String password, String role) {
+        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -37,7 +38,6 @@ public class User {
         this.email = email;
     }
 
-    // password intentionally has a getter and setter, but is ignored in JSON serialization
     public String getPassword() {
         return password;
     }
