@@ -51,7 +51,7 @@ public class QuizController {
             List<Quiz> quizzes = quizService.loadQuizzes();
 
             model.addAttribute("quizzes", quizzes);
-            return "/quizzes";
+            return "/quiz";
         }
     }
 
