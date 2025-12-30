@@ -60,17 +60,21 @@
 <!-- Header section with Logout Button -->
 <div class="header">
     <h1>Quiz Questions</h1>
-    <form th:action="@{/logout}" method="post">
+    <form th:action="@{/logout}" method="get">
         <button type="submit" class="logout-button">Logout</button>
     </form>
 </div>
 <form th:action="@{/submitQuiz}" method="post">
     <div th:each="quiz, iterStat : ${quizzes}" class="quiz-container">
-        <div class="question" th:text="${'Question ' + (iterStat.index + 1) + ': ' + quiz.questionText}"></div>
+        <div class="question" th:text="${'Question ' + iterStat.count + ': ' + quiz.getQuestionText()}"></div>
         <div class="options">
             <ul>
-                <li th:each="option, optStat : ${quiz.options}">
-                    <input type="radio" th:name="${'answer' + iterStat.index}" th:value="${option}" th:id="${'option' + iterStat.index + '-' + optStat.index}" required>
+                <li th:each="option, optStat : ${quiz.getOptions()}">
+                    <input type="radio"
+                           th:name="${'answer' + iterStat.index}"
+                           th:value="${option}"
+                           th:id="${'option' + iterStat.index + '-' + optStat.index}" required>
+
                     <label th:for="${'option' + iterStat.index + '-' + optStat.index}" th:text="${option}"></label>
                 </li>
             </ul>

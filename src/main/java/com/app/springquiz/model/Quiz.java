@@ -1,6 +1,7 @@
 package com.app.springquiz.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Quiz {
 
@@ -41,7 +42,15 @@ public class Quiz {
     }
 
     public void setOptions(ArrayList<String> options) {
-        this.options = options != null ? new ArrayList<>(options) : new ArrayList<>();
+        this.options = options;
+    }
+
+    public String getOptionsAsString() {
+        return String.join(",", options);
+    }
+
+    public void setOptionsFromString(String optionsString) {
+        this.options = new ArrayList<>(Arrays.asList(optionsString.split(",")));
     }
 
     public String getCorrectAnswer() {

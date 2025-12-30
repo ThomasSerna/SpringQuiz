@@ -84,48 +84,52 @@
             color: #4CAF50;
         }
 
+        a:hover{
+            cursor: pointer;
+        }
+
         .incorrect {
             color: #f44336;
         }
     </style>
 </head>
 <body>
-<!-- Header with Home and Logout Buttons -->
-<div class="header">
-    <a th:href="@{/home}">
-        <button class="nav-button">Home</button>
-    </a>
-    <form th:action="@{/logout}" method="post">
-        <button type="submit" class="nav-button">Logout</button>
-    </form>
-</div>
 
-<!-- Result Container -->
-<div class="result-container">
-    <!-- Result Header -->
-    <div class="result-header" th:text="${'You scored ' + correctAnswers + ' out of ' + totalQuestions + '!'}"></div>
-
-    <!-- Result Details -->
-    <div class="result-details">
-        <h3>Details:</h3>
-        <ul>
-            <!-- Iterate through quizzes and display correct/incorrect answers -->
-            <li th:each="quiz, iterStat : ${quizzes}">
-                <div>
-                    <strong th:text="${'Question ' + (iterStat.index + 1) + ': ' + quiz.questionText}"></strong>
-                </div>
-                <div>
-                    <span>Your Answer: </span>
-                    <span th:class="${quiz.correctAnswer == userAnswers[iterStat.index] ? 'correct' : 'incorrect'}"
-                          th:text="${userAnswers[iterStat.index]}"></span>
-                </div>
-                <div th:if="${quiz.correctAnswer != userAnswers[iterStat.index]}">
-                    <span>Correct Answer: </span>
-                    <span class="correct" th:text="${quiz.correctAnswer}"></span>
-                </div>
-            </li>
-        </ul>
+    <div class="header">
+        <a th:href="@{/home}">
+            <button class="nav-button">Go home</button>
+        </a>
+        <form th:action="@{/logout}" method="get">
+            <button type="submit" class="nav-button">Logout</button>
+        </form>
     </div>
-</div>
+
+    <!-- Result Container -->
+    <div class="result-container">
+        <!-- Result Header -->
+        <div class="result-header" th:text="${'You scored ' + correctAnswers + ' out of ' + totalQuestions + '!'}"></div>
+
+        <!-- Result Details -->
+        <div class="result-details">
+            <h3>Details:</h3>
+            <ul>
+                <!-- Iterate through quizzes and display answers -->
+                <li th:each="quiz, iterStat : ${quizzes}">
+                    <div>
+                        <strong th:text="${'Question ' + iterStat.count + ': ' + quiz.questionText}"></strong>
+                    </div>
+                    <div>
+                        <span>Your Answer: </span>
+                        <span th:class="${quiz.correctAnswer == userAnswers[iterStat.index] ? 'correct' : 'incorrect'}"
+                              th:text="${userAnswers[iterStat.index]}"></span>
+                    </div>
+                    <div th:if="${quiz.correctAnswer != userAnswers[iterStat.index]}">
+                        <span>Correct Answer: </span>
+                        <span class="correct" th:text="${quiz.correctAnswer}"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

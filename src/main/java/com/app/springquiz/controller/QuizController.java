@@ -42,16 +42,13 @@ public class QuizController {
                 .orElse("ROLE_USER");
         model.addAttribute("username", authentication.getName());
 
-        if (role.equals("ROLE_ADMIN")){
-            List<Quiz> quizzes = quizService.loadQuizzes();
+        List<Quiz> quizzes = quizService.loadQuizzes();
+        model.addAttribute("quizzes", quizzes);
 
-            model.addAttribute("quizzes", quizzes);
+        if (role.equals("ROLE_ADMIN")){
             return "/quiz/QuizList";
         } else {
-            List<Quiz> quizzes = quizService.loadQuizzes();
-
-            model.addAttribute("quizzes", quizzes);
-            return "/quiz";
+            return "/quizz";
         }
     }
 
@@ -77,13 +74,15 @@ public class QuizController {
     public String register(
             @RequestParam String username,
             @RequestParam String password,
-            @RequestParam String roles,
+            @RequestParam String role,
             @RequestParam String email
     ) {
         // Adding the user to the in-memory database
         try {
-            quizUserDetailsService.registerUser(username, password, roles, email);
+            quizUserDetailsService.registerUser(username, password, role, email);
+            System.out.println("user: " + username + " Successfully registered");
         } catch (Exception e){
+            System.out.println(e.getMessage());
             return "redirect:/register?error";
         }
 

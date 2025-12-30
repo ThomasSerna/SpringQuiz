@@ -85,40 +85,40 @@
     </style>
 </head>
 <body>
-<!-- Header section with Logout Button -->
-<div class="header">
-    <h1>Quiz Questions</h1>
-    <form th:action="@{/logout}" method="get">
-        <button type="submit" class="logout-button">Logout</button>
-    </form>
-</div>
+    <!-- Header section with Logout Button -->
+    <div class="header">
+        <h1>Quiz Questions</h1>
+        <form th:action="@{/logout}" method="get">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
 
-<!-- Add Quiz Button -->
-<div style="padding: 20px;">
-    <a th:href="@{/addQuiz}">
-        <button class="add-quiz-button">Add Quiz</button>
-    </a>
-</div>
-
-<!-- Quiz List -->
-<div style="padding: 20px;">
-    <div th:each="quiz : ${quizzes}" class="quiz-container">
-        <div class="question" th:text="${'Question: ' + quiz.questionText}"></div>
-        <div class="options">
-            <ul>
-                <li th:each="option : ${quiz.options}" th:text="${option}"></li>
-            </ul>
-        </div>
-        <div class="correct-answer" th:text="${'Correct Answer: ' + quiz.correctAnswer}"></div>
-        <!-- Edit Button -->
-        <a th:href="@{/editQuiz/{id}(id=${quiz.id})}">
-            <button class="edit-quiz-button">Edit Quiz</button>
-        </a>
-        <!-- Delete Button -->
-        <a th:href="@{/deleteQuiz/{id}(id=${quiz.id})}">
-            <button class="delete-quiz-button">Delete Quiz</button>
+    <!-- Add Quiz Button -->
+    <div style="padding: 20px;">
+        <a th:href="@{/quiz/add}">
+            <button class="add-quiz-button">Add Quiz</button>
         </a>
     </div>
-</div>
+
+    <!-- Quiz List -->
+    <div style="padding: 20px;">
+        <div th:each="quiz : ${quizzes}" class="quiz-container">
+            <div class="question" th:text="${'Question: ' + quiz.questionText}"></div>
+            <div class="options">
+                <ul>
+                    <li th:each="option : ${quiz.options}" th:text="${option}"></li>
+                </ul>
+            </div>
+            <div class="correct-answer" th:text="${'Correct Answer: ' + quiz.correctAnswer}"></div>
+            <!-- Edit Button -->
+            <a th:href="@{/quiz/edit/{id}(id=${quiz.id})}">
+                <button class="edit-quiz-button">Edit Quiz</button>
+            </a>
+            <!-- Delete Button -->
+            <a th:href="@{/quiz/delete/{id}(id=${quiz.id})}">
+                <button class="delete-quiz-button">Delete Quiz</button>
+            </a>
+        </div>
+    </div>
 </body>
 </html>

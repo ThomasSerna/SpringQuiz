@@ -21,6 +21,7 @@ public class WebSecurityConfig {
         this.quizUserDetailsService = quizUserDetailsService;
     }
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login", "/register").permitAll()
