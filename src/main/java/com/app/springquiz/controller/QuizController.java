@@ -87,9 +87,8 @@ public class QuizController {
         try {
             quizUserDetailsService.registerUser(username, password, role, email);
             logger.info("User successfully registered: {} - {} - {}", username, role, email);
-            System.out.println(username + " - " + password);
         } catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.error("Error: {}", e.getMessage());
             return "redirect:/register?error";
         }
 
