@@ -88,7 +88,7 @@
     <div class="login-container">
         <h2>Login</h2>
         <!-- Login Form -->
-        <form th:action="@{/login}" method="post" class="form-group">
+        <form th:action="@{/login}" method="post" class="form-group" onsubmit="normalizeUser()">
             <!-- Username -->
             <input type="text" name="username" placeholder="Username" required>
             <!-- Password -->
@@ -108,4 +108,10 @@
         <p>Don't have an account? <a href="/register">Register here</a></p>
     </div>
 </body>
+<script>
+    function normalizeUser() {
+        const username = document.getElementById("username");
+        username.value = username.value.trim().toLowerCase();
+    }
+</script>
 </html>

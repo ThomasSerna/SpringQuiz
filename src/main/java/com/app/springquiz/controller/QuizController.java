@@ -12,12 +12,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 public class QuizController {
+
+    // Logger
+    private static final Logger logger = LoggerFactory.getLogger(QuizController.class);
 
     // DI
 
@@ -80,7 +86,8 @@ public class QuizController {
         // Adding the user to the in-memory database
         try {
             quizUserDetailsService.registerUser(username, password, role, email);
-            System.out.println("user: " + username + " Successfully registered");
+            logger.info("User successfully registered: {} - {} - {}", username, role, email);
+            System.out.println(username + " - " + password);
         } catch (Exception e){
             System.out.println(e.getMessage());
             return "redirect:/register?error";
