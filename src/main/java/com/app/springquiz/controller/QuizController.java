@@ -46,9 +46,9 @@ public class QuizController {
         model.addAttribute("quizzes", quizzes);
 
         if (role.equals("ROLE_ADMIN")){
-            return "/quiz/QuizList";
+            return "quiz/QuizList";
         } else {
-            return "/quizz";
+            return "quizz";
         }
     }
 
@@ -57,17 +57,17 @@ public class QuizController {
 
     @GetMapping("/login")
     public String loginPage(){
-        return "/auth/login";
+        return "auth/login";
     }
 
     @GetMapping("/logout")
     public String logoutPage(){
-        return "/auth/logout";
+        return "auth/logout";
     }
 
     @GetMapping("/register")
     public String registerPage(){
-        return "/auth/register";
+        return "auth/register";
     }
 
     @PostMapping("/register")
@@ -100,7 +100,7 @@ public class QuizController {
     @GetMapping("/quiz/add")
     public String ShowAddQuiz(Model model) {
         model.addAttribute("quiz", new Quiz());
-        return "/quiz/add";
+        return "quiz/add";
     }
 
     @PostMapping("/quiz/add")
@@ -128,7 +128,7 @@ public class QuizController {
     public String ShowEditQuiz(@PathVariable("id") int id, Model model) {
         Quiz quiz = quizService.getQuizById(id);
         model.addAttribute("quiz", quiz);
-        return "/quiz/edit";
+        return "quiz/edit";
     }
 
     @PostMapping("/quiz/edit")
@@ -186,7 +186,7 @@ public class QuizController {
         model.addAttribute("correctAnswers", correctAnswers);
         model.addAttribute("totalQuestions", quizzes.size());
 
-        return "/quiz/result";
+        return "quiz/result";
     }
 
 
