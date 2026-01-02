@@ -64,6 +64,11 @@
             margin-top: 10px;
         }
 
+        .logout {
+            color: black;
+            margin-top: 10px;
+        }
+
         .success {
             color: green;
             margin-top: 10px;
@@ -104,6 +109,12 @@
         <div th:if="${param.success}" class="success">
             User registered successfully!
         </div>
+
+        <!-- Logout message -->
+        <div th:if="${param.logout}" class="logout">
+            You have successfully logout
+        </div>
+
         <!-- Link to Registration Page -->
         <p>Don't have an account? <a href="/register">Register here</a></p>
     </div>
