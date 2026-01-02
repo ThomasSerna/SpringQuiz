@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Controller
@@ -83,6 +84,7 @@ public class QuizController {
             @RequestParam String role,
             @RequestParam String email
     ) {
+        username = username.trim().toLowerCase(Locale.ROOT);
         // Adding the user to the in-memory database
         try {
             quizUserDetailsService.registerUser(username, password, role, email);
